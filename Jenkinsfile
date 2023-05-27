@@ -13,10 +13,20 @@ pipeline {
             steps{
                 echo 'Genera artefactos'
                 sh 'mvn clean install'
-
+            }
+        }
+        stage('storage artifacts'){
+            steps{
+                echo 'Almacenar artefactos'
+                sh "archiveArtifacts artifacts: '/var/jenkins_home/workspace/MiAppPipeline/target/*.jar', followSymlinks: false"
             }
         }
     }
 }
+
+
+
+
+
 
 
