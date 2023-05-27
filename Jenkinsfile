@@ -19,7 +19,13 @@ pipeline {
             steps{
                 echo 'Almacenar artefactos'
                 sh 'chmod 777 /var/jenkins_home/workspace/MiAppPipeline'
-                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false , fingerprint: true
+            }
+        }
+        stage('TESTS') {
+            steps{
+                echo 'Realiza Pruebas'
+                sh 'mvn test '
             }
         }
     }
