@@ -1,6 +1,15 @@
 pipeline{
     agent any
-    tool{
-        maven:'nombre'
+    tools{
+        maven:'jenkinsmaven'
+    }
+    stages{
+        stage('Get GitHub'){
+            steps{
+
+            }
+        }
     }
 }
+
+
