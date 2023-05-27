@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Get GitHub') {
             steps {
-                git 'https://github.com/Calegria25/AppPipelines.git'
+                git branch: 'main', url: 'git@github.com:Calegria25/AppPipelines.git'
 
             }
         }
