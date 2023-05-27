@@ -18,6 +18,7 @@ pipeline {
         stage('storage artifacts'){
             steps{
                 echo 'Almacenar artefactos'
+                echo '$PWD'
                 archiveArtifacts artifacts: '/var/jenkins_home/workspace/MiAppPipeline/target/*.jar', followSymlinks: false
             }
         }
