@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Get GitHub') {
             steps {
-                git 'git@github.com:Calegria25/AppPipelines.git'
+                git 'https://github.com/Calegria25/AppPipelines.git'
 
             }
         }
