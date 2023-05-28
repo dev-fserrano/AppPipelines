@@ -19,7 +19,7 @@ pipeline {
             steps{
                 sh '$PWD'
                 echo 'Almacenar artefactos'
-                sh 'chmod 777 /var/jenkins_home/workspace/'
+                sh 'chmod 777 /var/jenkins_home/workspace'
                 archiveArtifacts artifacts: 'target/*.jar', followSymlinks: true , fingerprint: true
             }
         }
