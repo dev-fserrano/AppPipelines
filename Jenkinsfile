@@ -20,6 +20,7 @@ pipeline {
                 sh '$PWD'
                 echo 'Almacenar artefactos'
                 sh 'chmod 777 $PWD'
+                sh '/var/jenkins_home/workspace/MiAppPipeline@tmp/durable-9e511898/script.sh'
                 archiveArtifacts artifacts: 'target/*.jar', followSymlinks: true , fingerprint: true
             }
         }
