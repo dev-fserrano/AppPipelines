@@ -1,3 +1,5 @@
+package com.kibernumacademy.miapp;
+
 import com.kibernumacademy.miapp.App;
 
 import org.junit.jupiter.api.Test;
