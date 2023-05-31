@@ -13,10 +13,28 @@ pipeline {
             steps{
                 echo 'Genera artefactos'
                 sh 'mvn clean install'
-
+            }
+        }
+        stage('storage artifacts'){
+            steps{
+                echo 'Almacenar artefactos'
+                sh 'chmod 777 $PWD'
+                sh 'chmod 777 /var/jenkins_home/workspace'
+                archiveArtifacts artifacts: 'target/*.jar', followSymlinks: true , fingerprint: true
+            }
+        }
+        stage('TESTS') {
+            steps{
+                echo 'Realiza Pruebas'
+                sh 'mvn test '
             }
         }
     }
 }
+
+
+
+
+
 
 
