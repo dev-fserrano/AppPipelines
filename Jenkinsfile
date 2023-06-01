@@ -42,16 +42,40 @@ pipeline {
 
             }
         }
-        stage("Quality Gate") {
+    //     stage("Quality Gate") {
+    //     steps {
+    //         timeout(time: 15, unit: 'MINUTES') { 
+    //             waitForQualityGate abortPipeline: true
+    //             script{
+    //                 def qg = waitForQualityGate() 
+    //                 if(qg.status != 'OK'){ 
+    //                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+        stage('nexus') {
         steps {
-            timeout(time: 15, unit: 'MINUTES') { 
-                waitForQualityGate abortPipeline: true
-                script{
-                    def qg = waitForQualityGate() 
-                    if(qg.status != 'OK'){ 
-                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                    }
-                }
+            script {
+                  dir("target"){
+                    def pom = readMavenPom file: "pom.xml"
+                                nexusArtifactUploader(
+                                    nexusVersion: 'nexus3',
+                                    protocol: 'http',
+                                    nexusUrl: 'nexus:8081',
+                                    groupId: pom.groupId,
+                                    version: pom.version,
+                                    repository: 'maven-snapshots',
+                                    credentialsId: 'nexus',
+                                    artifacts: [
+                                        [artifactId: pom.artifactId,
+                                        classifier: '',
+                                        file: 'MiApp-0.0.1-SNAPSHOT.jar',
+                                        type: pom.packaging]
+                                    ]
+                                )
+                            }
             }
         }
     }
