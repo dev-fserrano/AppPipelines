@@ -58,7 +58,6 @@ pipeline {
         stage('nexus') {
         steps {
             script {
-                  dir("workspace"){
                     def pom = readMavenPom file: "pom.xml"
                                 nexusArtifactUploader(
                                     nexusVersion: 'nexus3',
@@ -74,7 +73,7 @@ pipeline {
                                         file: 'MiApp-0.0.1-SNAPSHOT.jar',
                                         type: pom.packaging]
                                     ]
-                                )
+                                
                             }
             }
         }
