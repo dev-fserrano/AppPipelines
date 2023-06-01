@@ -58,7 +58,7 @@ pipeline {
         stage('nexus') {
         steps {
             script {
-                  dir("AppPipelines"){
+                  dir("workspace"){
                     def pom = readMavenPom file: "pom.xml"
                                 nexusArtifactUploader(
                                     nexusVersion: 'nexus3',
