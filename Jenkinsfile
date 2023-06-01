@@ -44,11 +44,11 @@ pipeline {
         }
         stage("Quality Gate") {
         steps {
-            timeout(time: 15, unit: 'MINUTES') { // If analysis takes longer than indicated time, then build will be aborted
+            timeout(time: 15, unit: 'MINUTES') { 
                 waitForQualityGate abortPipeline: true
                 script{
-                    def qg = waitForQualityGate() // Waiting for analysis to be completed
-                    if(qg.status != 'OK'){ // If quality gate was not met, then present error
+                    def qg = waitForQualityGate() 
+                    if(qg.status != 'OK'){ 
                         error "Pipeline aborted due to quality gate failure: ${qg.status}"
                     }
                 }
