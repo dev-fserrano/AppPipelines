@@ -31,16 +31,20 @@ pipeline {
         }
         stage('Sonar Scanner') {
             steps {
-                script {
-                    def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
+                withSonarQubeEnv('sonarenv'){
+                    script {
+                        def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                        withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
                         sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=."
                     }
                 }
             }
+
+            }
         }
         stage("Quality Gate") {
         steps {
+            withS
             timeout(time: 15, unit: 'MINUTES') { // If analysis takes longer than indicated time, then build will be aborted
                 waitForQualityGate abortPipeline: true
                 script{
