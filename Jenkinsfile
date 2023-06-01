@@ -83,7 +83,7 @@ pipeline {
             nexusArtifactUploader(
                 nexusVersion: 'nexus3',
                 protocol: 'http',
-                nexusUrl: 'nexus:8081',
+                nexusUrl: '172.21.0.1:8081',
                 groupId: 'cl.awakelab.junitapp',
                 version: '0.0.1-SNAPSHOT',
                 repository: 'maven-snapshots',
