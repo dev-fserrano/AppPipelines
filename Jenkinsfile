@@ -55,27 +55,50 @@ pipeline {
     //         }
     //     }
     // }
-        stage('nexus') {
-        steps {
-            script {
-                    def pom = readMavenPom file: "pom.xml"
-                                nexusArtifactUploader(
-                                    nexusVersion: 'nexus3',
-                                    protocol: 'http',
-                                    nexusUrl: '172.21.0.1:8081',
-                                    groupId: pom.groupId,
-                                    version: pom.version,
-                                    repository: 'maven-snapshots',
-                                    credentialsId: 'nexus',
-                                    artifacts: [
-                                        [artifactId: pom.artifactId,
-                                        classifier: '',
-                                        file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
-                                        type: pom.packaging]
-                                    ]
-                                )
+    //     stage('nexus') {
+    //     steps {
+    //         script {
+    //                 def pom = readMavenPom file: "pom.xml"
+    //                             nexusArtifactUploader(
+    //                                 nexusVersion: 'nexus3',
+    //                                 protocol: 'http',
+    //                                 nexusUrl: '172.21.0.1:8081',
+    //                                 groupId: pom.groupId,
+    //                                 version: pom.version,
+    //                                 repository: 'maven-snapshots',
+    //                                 credentialsId: 'nexus',
+    //                                 artifacts: [
+    //                                     [artifactId: pom.artifactId,
+    //                                     classifier: '',
+    //                                     file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
+    //                                     type: pom.packaging]
+    //                                 ]
+    //                             )
                             
-            }
+    //         }
+    //     }
+    // }
+     stage('Nexus Upload') {
+        steps {
+            nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: 'nexus:8081',
+                groupId: 'cl.awakelab.junitapp',
+                version: '0.0.1-SNAPSHOT',
+                repository: 'maven-snapshots',
+                credentialsId: 'nexus',
+                artifacts: [
+                    [artifactId: 'proyectoJunit',
+                    classifier: '',
+                    file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
+                    type: 'jar'],
+                    [artifactId: 'proyectoJunit',
+                    classifier: '',
+                    file: 'pom.xml',
+                    type: 'pom']
+                ]
+            )
         }
     }
 }
