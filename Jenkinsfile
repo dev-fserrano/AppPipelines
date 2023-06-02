@@ -42,19 +42,19 @@ pipeline {
 
             }
         }
-    //     stage("Quality Gate") {
-    //     steps {
-    //         timeout(time: 15, unit: 'MINUTES') { 
-    //             waitForQualityGate abortPipeline: true
-    //             script{
-    //                 def qg = waitForQualityGate() 
-    //                 if(qg.status != 'OK'){ 
-    //                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 15, unit: 'MINUTES') { 
+                    waitForQualityGate abortPipeline: true
+                    script{
+                        def qg = waitForQualityGate() 
+                        if(qg.status != 'OK'){ 
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
     //     stage('nexus') {
     //     steps {
     //         script {
