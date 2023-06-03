@@ -102,6 +102,7 @@ pipeline {
         }
     }
     stage('SLACK') {
+        steps {
         post {
             always {
                 echo 'Slack Notification'
@@ -110,6 +111,8 @@ pipeline {
                 message: "*${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
     //                message: "Fin de Stage Get Github"    
             }
+        }
+
         }
     }
     }
