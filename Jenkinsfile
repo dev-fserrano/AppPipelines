@@ -29,19 +29,19 @@ pipeline {
                 sh 'mvn test '
             }
         }
-        // stage('Sonar Scanner') {
-        //     steps {
-        //         withSonarQubeEnv('sonarenv'){
-        //             script {
-        //                 def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-        //                 withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
-        //                 sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=."
-        //             }
-        //             }
-        //         }
+        stage('Sonar Scanner') {
+            steps {
+                withSonarQubeEnv('sonarenv'){
+                    script {
+                        def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                        withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
+                        sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=."
+                    }
+                    }
+                }
 
-        //     }
-        // }
+            }
+        }
         stage("Quality Gate") {
             steps {
                 timeout(time: 15, unit: 'MINUTES') { 
@@ -55,29 +55,6 @@ pipeline {
                 }
             }
         }
-    //     stage('nexus') {
-    //     steps {
-    //         script {
-    //                 def pom = readMavenPom file: "pom.xml"
-    //                             nexusArtifactUploader(
-    //                                 nexusVersion: 'nexus3',
-    //                                 protocol: 'http',
-    //                                 nexusUrl: '172.21.0.1:8081',
-    //                                 groupId: pom.groupId,
-    //                                 version: pom.version,
-    //                                 repository: 'maven-snapshots',
-    //                                 credentialsId: 'nexus',
-    //                                 artifacts: [
-    //                                     [artifactId: pom.artifactId,
-    //                                     classifier: '',
-    //                                     file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
-    //                                     type: pom.packaging]
-    //                                 ]
-    //                             )
-                            
-    //         }
-    //     }
-    // } 
         stage('Nexus Upload') {
             steps {
                 nexusArtifactUploader(
@@ -101,20 +78,7 @@ pipeline {
                 )
             }
         }
-//        stage('SLACK') {
-//            steps {
     }
-    post {
-        always {
-            echo 'Slack Notification'
-            slackSend channel: '#integracion',
-//                color: COLOR_MAP[currentBuild.currentResult],
-            message: "*${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
-//                message: "Fin de Stage Get Github"    
-        }
-    }
-//            }
-//        }
 }
 
 
