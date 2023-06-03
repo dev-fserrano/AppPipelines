@@ -15,8 +15,8 @@ pipeline {
                 slackSend channer: '#integracion',
 //                color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
-//                message: "Fin de Stage Get Github"
-                }
+//                message: "Fin de Stage Get Github"    
+            }
         }
         stage('Generate artifacts') {
             steps{
