@@ -29,19 +29,19 @@ pipeline {
                 sh 'mvn test '
             }
         }
-        stage('Sonar Scanner') {
-            steps {
-                withSonarQubeEnv('sonarenv'){
-                    script {
-                        def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                        withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
-                        sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=."
-                    }
-                    }
-                }
+        // stage('Sonar Scanner') {
+        //     steps {
+        //         withSonarQubeEnv('sonarenv'){
+        //             script {
+        //                 def sonarqubeScannerHome = tool name: 'sonar', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        //                 withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
+        //                 sh "${sonarqubeScannerHome}/bin/sonar-scanner -e -Dsonar.host.url=http://SonarQube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=mv-maven -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=GS -Dsonar.sources=src/main/java/com/kibernumacademy/miapp -Dsonar.tests=src/test/java/com/kibernumacademy/miapp -Dsonar.language=java -Dsonar.java.binaries=."
+        //             }
+        //             }
+        //         }
 
-            }
-        }
+        //     }
+        // }
         stage("Quality Gate") {
             steps {
                 timeout(time: 15, unit: 'MINUTES') { 
@@ -78,43 +78,43 @@ pipeline {
     //         }
     //     }
     // } 
-    stage('Nexus Upload') {
-        steps {
-            nexusArtifactUploader(
-                nexusVersion: 'nexus3',
-                protocol: 'http',
-                nexusUrl: 'nexus:8081',
-                groupId: 'com.kibernumacademy',
-                version: '0.0.1-SNAPSHOT',
-                repository: 'reponexus_g6',
-                credentialsId: 'nexuscredenciales',
-                artifacts: [
-                    [artifactId: 'MiApp',
-                    classifier: '',
-                    file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
-                    type: 'jar'],
-                    [artifactId: 'MiApp',
-                    classifier: '',
-                    file: 'pom.xml',
-                    type: 'pom']
-                ]
-            )
-        }
-    }
-    stage('SLACK') {
-        steps {
-            post {
-                always {
-                    echo 'Slack Notification'
-                    slackSend channel: '#integracion',
-        //                color: COLOR_MAP[currentBuild.currentResult],
-                    message: "*${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
-        //                message: "Fin de Stage Get Github"    
-                }
+        stage('Nexus Upload') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: 'nexus:8081',
+                    groupId: 'com.kibernumacademy',
+                    version: '0.0.1-SNAPSHOT',
+                    repository: 'reponexus_g6',
+                    credentialsId: 'nexuscredenciales',
+                    artifacts: [
+                        [artifactId: 'MiApp',
+                        classifier: '',
+                        file: 'target/MiApp-0.0.1-SNAPSHOT.jar',
+                        type: 'jar'],
+                        [artifactId: 'MiApp',
+                        classifier: '',
+                        file: 'pom.xml',
+                        type: 'pom']
+                    ]
+                )
             }
         }
+//        stage('SLACK') {
+//            steps {
     }
+    post {
+        always {
+            echo 'Slack Notification'
+            slackSend channel: '#integracion',
+//                color: COLOR_MAP[currentBuild.currentResult],
+            message: "*${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More Info at: ${env.BUILD_URL}"
+//                message: "Fin de Stage Get Github"    
+        }
     }
+//            }
+//        }
 }
 
 
